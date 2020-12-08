@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+
+    <!-- Bootstrap-tyylikirjasto -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"
+            integrity="sha384-5h4UG+6GOuV9qXh6HqOLwZMY4mnLPraeTrjT5v07o347pj6IkfuoASuGBhfDsp3d"
+            crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css"
+          integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK"
+          crossorigin="anonymous"
+    >
+
+    <!-- Oma ohjelmakoodi -->
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function () {
+        new Vue({
+          el: '#app',
+          data: {
+           todos: [],
+          },
+          methods: {
+            addItem() {
+              const newTask = prompt('Mitä pitää tehdä?')
+              if(newTask){
+                this.todos.push(newTask)
+                this.persisItem()
+              }
+            },
+            removeItem(i){
+              if(confirm('Haluatko varmasti poistaa?')){
+                this.todos.splice(i, 1)
+                this.persisItem()
+              } 
+            },
+            persisItem() {
+              localStorage.setItem('testisovelluksendata', JSON.stringify(this.todos))
+            }
+          },
+
+          created() {
+            const state = localStorage.getItem('testisovelluksendata')
+            if(state){
+              this.todos = JSON.parse(state)
+            }
+          }
+        })
+      });
+    </script>
+
+    <!-- Omat tyylimäärittelyt kirjoitetaan tähän -->
+    <style>
+
+    </style>
+
+    <title>Tästä se alkaa</title>
+  </head>
+  <body>
+    <h3>Todo lista</h3>
+    <!-- Vuejs instanssi kiinnittyy tähän elementtiin ... el: '#app' -->
+    <div id="app">
+      <div v-for="(todo, i) in todos">
+        <b>{{todo}}</b> 
+        <button @click="removeItem(i)" class="btn btn-danger">Poista</button></b> 
+      </div>
+      <!--<input id="inputElement"></input> -->
+      <button @click="addItem">Lisää</button>
+    </div>
+  </body>
+</html>
